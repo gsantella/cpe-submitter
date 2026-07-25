@@ -61,9 +61,13 @@ router.get("/events/:id/export", async (req, res): Promise<void> => {
     return;
   }
 
-  // Set Group type in cell E2
+  // Set Group type in cell E2 using the full ISC2 label
+  const groupTypeLabels: Record<string, string> = {
+    "Group A": "Group A - Domain Related Meetings/Events",
+    "Group B": "Group B - Management/Officer Meetings/No Domain",
+  };
   const e2 = sheet.getCell("E2");
-  e2.value = event.groupType;
+  e2.value = groupTypeLabels[event.groupType] ?? event.groupType;
 
   // Clear any existing attendee data rows (7+) from the template sample data
   for (let rowNum = 7; rowNum <= 20; rowNum++) {

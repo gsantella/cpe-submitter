@@ -1,8 +1,8 @@
-import { pgTable, integer, timestamp, primaryKey } from "drizzle-orm/pg-core";
+import { sqliteTable, integer, text, primaryKey } from "drizzle-orm/sqlite-core";
 import { membersTable } from "./members";
 import { eventsTable } from "./events";
 
-export const eventAttendeesTable = pgTable(
+export const eventAttendeesTable = sqliteTable(
   "event_attendees",
   {
     eventId: integer("event_id")
@@ -11,7 +11,7 @@ export const eventAttendeesTable = pgTable(
     memberId: integer("member_id")
       .notNull()
       .references(() => membersTable.id, { onDelete: "cascade" }),
-    checkedInAt: timestamp("checked_in_at", { withTimezone: true }).notNull().defaultNow(),
+    checkedInAt: text("checked_in_at").notNull().$defaultFn(() => new Date().toISOString()),
   },
   (table) => [primaryKey({ columns: [table.eventId, table.memberId] })],
 );

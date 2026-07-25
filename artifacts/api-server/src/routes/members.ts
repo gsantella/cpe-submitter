@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { and, eq, ilike, or } from "drizzle-orm";
+import { and, eq, like, or } from "drizzle-orm";
 import { db, membersTable } from "@workspace/db";
 import {
   CreateMemberBody,
@@ -31,9 +31,9 @@ router.get("/members", async (req, res): Promise<void> => {
       .from(membersTable)
       .where(
         or(
-          ilike(membersTable.firstName, term),
-          ilike(membersTable.lastName, term),
-          ilike(membersTable.isc2Number, term),
+          like(membersTable.firstName, term),
+          like(membersTable.lastName, term),
+          like(membersTable.isc2Number, term),
         ),
       )
       .orderBy(membersTable.lastName, membersTable.firstName);

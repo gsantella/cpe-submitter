@@ -1,14 +1,16 @@
 import { defineConfig } from "drizzle-kit";
+import { mkdirSync } from "fs";
 import path from "path";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL, ensure the database is provisioned");
-}
+// Resolve data dir relative to workspace root (two levels up from lib/db)
+const dataDir = path.join(__dirname, "../../data");
+mkdirSync(dataDir, { recursive: true });
+const dbPath = path.join(dataDir, "cpe-tracker.db");
 
 export default defineConfig({
   schema: path.join(__dirname, "./src/schema/index.ts"),
-  dialect: "postgresql",
+  dialect: "sqlite",
   dbCredentials: {
-    url: process.env.DATABASE_URL,
+    url: dbPath,
   },
 });

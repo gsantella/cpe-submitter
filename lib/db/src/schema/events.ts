@@ -1,15 +1,15 @@
-import { pgTable, text, serial, timestamp, real } from "drizzle-orm/pg-core";
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
-export const eventsTable = pgTable("events", {
-  id: serial("id").primaryKey(),
+export const eventsTable = sqliteTable("events", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   date: text("date").notNull(), // YYYY-MM-DD
   groupType: text("group_type").notNull(), // "Group A" | "Group B"
   cpeCredits: real("cpe_credits").notNull(),
   description: text("description").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  createdAt: text("created_at").notNull().$defaultFn(() => new Date().toISOString()),
 });
 
 export const insertEventSchema = createInsertSchema(eventsTable).omit({ id: true, createdAt: true });

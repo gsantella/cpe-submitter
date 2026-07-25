@@ -1,16 +1,17 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import pg from "pg";
+import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import { mkdirSync } from "fs";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 import * as schema from "./schema";
 
-const { Pool } = pg;
+// Resolve data dir relative to this file's location (lib/db/src -> lib/db -> workspace root)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const dataDir = join(__dirname, "../../../data");
+mkdirSync(dataDir, { recursive: true });
 
-if (!process.env.DATABASE_URL) {
-  throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
-  );
-}
-
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-export const db = drizzle(pool, { schema });
+const sqlite = new Database(join(dataDir, "cpe-tracker.db"));
+export const db = drizzle(sqlite, { schema });
 
 export * from "./schema";

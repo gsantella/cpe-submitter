@@ -1,0 +1,109 @@
+import { Router, type IRouter } from "express";
+import { eq } from "drizzle-orm";
+import path from "path";
+import ExcelJS from "exceljs";
+import { db, eventsTable, eventAttendeesTable, membersTable } from "@workspace/db";
+
+const router: IRouter = Router();
+
+// Template is at artifacts/api-server/src/assets/isc2-template.xlsx
+// In dev: __dirname = artifacts/api-server/dist, so we go up to src/assets
+const TEMPLATE_PATH = path.join(
+  path.dirname(path.dirname(new URL(import.meta.url).pathname)),
+  "src",
+  "assets",
+  "isc2-template.xlsx",
+);
+
+function formatDate(dateStr: string): string {
+  // dateStr is YYYY-MM-DD, convert to MM/DD/YY
+  const [year, month, day] = dateStr.split("-");
+  return `${month}/${day}/${year.slice(2)}`;
+}
+
+router.get("/events/:id/export", async (req, res): Promise<void> => {
+  const rawId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+  const id = parseInt(rawId, 10);
+  if (isNaN(id)) {
+    res.status(400).json({ error: "Invalid event ID" });
+    return;
+  }
+
+  // Load event
+  const [event] = await db.select().from(eventsTable).where(eq(eventsTable.id, id));
+  if (!event) {
+    res.status(404).json({ error: "Event not found" });
+    return;
+  }
+
+  // Load attendees
+  const attendees = await db
+    .select({
+      memberId: membersTable.id,
+      firstName: membersTable.firstName,
+      lastName: membersTable.lastName,
+      isc2Number: membersTable.isc2Number,
+      checkedInAt: eventAttendeesTable.checkedInAt,
+    })
+    .from(eventAttendeesTable)
+    .innerJoin(membersTable, eq(eventAttendeesTable.memberId, membersTable.id))
+    .where(eq(eventAttendeesTable.eventId, id))
+    .orderBy(membersTable.lastName, membersTable.firstName);
+
+  // Load template workbook preserving all formatting
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile(TEMPLATE_PATH);
+
+  // Sheet 2 is "Chapter Attendance and CPE Sub" (index 1)
+  const sheet = workbook.worksheets[1];
+  if (!sheet) {
+    res.status(500).json({ error: "Template sheet not found" });
+    return;
+  }
+
+  // Set Group type in cell E2
+  const e2 = sheet.getCell("E2");
+  e2.value = event.groupType;
+
+  // Clear any existing attendee data rows (7+) from the template sample data
+  for (let rowNum = 7; rowNum <= 20; rowNum++) {
+    const row = sheet.getRow(rowNum);
+    row.getCell(1).value = null; // A - ISC2 Member ID
+    row.getCell(2).value = null; // B - First Name
+    row.getCell(3).value = null; // C - Last Name
+    row.getCell(4).value = null; // D - Description
+    row.getCell(5).value = null; // E - CPEs
+    row.getCell(6).value = null; // F - Date
+    row.commit();
+  }
+
+  // Write attendee rows starting at row 7
+  const formattedDate = formatDate(event.date);
+  attendees.forEach((attendee, idx) => {
+    const rowNum = 7 + idx;
+    const row = sheet.getRow(rowNum);
+
+    // Column A: ISC2 Member ID (numeric — strip non-digits for storage as number if possible)
+    const numId = Number(attendee.isc2Number);
+    row.getCell(1).value = isNaN(numId) ? attendee.isc2Number : numId;
+    row.getCell(2).value = attendee.firstName;   // B: First Name
+    row.getCell(3).value = attendee.lastName;    // C: Last Name
+    row.getCell(4).value = event.description;    // D: Description
+    row.getCell(5).value = event.cpeCredits;     // E: CPEs
+    row.getCell(6).value = formattedDate;        // F: Date
+
+    row.commit();
+  });
+
+  // Generate safe filename
+  const safeName = event.name.replace(/[^a-zA-Z0-9_\- ]/g, "").trim();
+  const filename = `ISC2_CPE_${safeName}_${event.date}.xlsx`;
+
+  res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+  res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+
+  await workbook.xlsx.write(res);
+  res.end();
+});
+
+export default router;

@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "ISC2 CPE Tracker"
+version = "1.0.0"
+id = "artifacts/cpe-tracker"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25528
+
+[services.development]
+run = "pnpm --filter @workspace/cpe-tracker run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/cpe-tracker", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/cpe-tracker/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25528"
+BASE_PATH = "/"

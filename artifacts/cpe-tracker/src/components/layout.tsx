@@ -1,6 +1,8 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Users, CalendarDays, PlusCircle, Building2 } from "lucide-react";
+import { LayoutDashboard, Users, CalendarDays, PlusCircle, Building2, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/auth-context";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,6 +10,8 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const [location] = useLocation();
+  const { enabled, username, logout } = useAuth();
+  const queryClient = useQueryClient();
 
   const navigation = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -15,6 +19,11 @@ export default function Layout({ children }: LayoutProps) {
     { name: "Events", href: "/events", icon: CalendarDays },
     { name: "Chapter", href: "/chapter", icon: Building2 },
   ];
+
+  const handleLogout = async () => {
+    await logout();
+    queryClient.clear();
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col md:flex-row">
@@ -55,7 +64,7 @@ export default function Layout({ children }: LayoutProps) {
           </nav>
         </div>
         
-        <div className="p-4 border-t border-sidebar-border">
+        <div className="p-4 border-t border-sidebar-border space-y-2">
           <Link
             href="/events/new"
             className="flex items-center justify-center gap-2 w-full bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2.5 rounded-md text-sm font-medium transition-colors"
@@ -64,6 +73,18 @@ export default function Layout({ children }: LayoutProps) {
             <PlusCircle className="w-4 h-4" />
             New Event
           </Link>
+
+          {/* Show logout only when auth is enabled */}
+          {enabled && username && (
+            <button
+              onClick={handleLogout}
+              className="flex items-center justify-center gap-2 w-full text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50 px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              data-testid="nav-logout"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign out ({username})
+            </button>
+          )}
         </div>
       </div>
 

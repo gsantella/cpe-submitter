@@ -57,7 +57,7 @@ export default function NewEvent() {
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const val = e.target.value.replace(/[,"]/g, ""); // No commas or quotes as requested
+    const val = e.target.value.replace(/[,"']/g, ""); // Strip commas and single/double quotes
     if (val.length <= 100) {
       setFormData(prev => ({ ...prev, description: val }));
     }
@@ -160,13 +160,16 @@ export default function NewEvent() {
               </div>
               <textarea
                 id="description"
-                className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[100px] resize-none"
+                className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[80px] resize-none"
                 value={formData.description}
                 onChange={handleDescriptionChange}
-                placeholder="Brief description (no commas or quotes allowed)..."
+                placeholder="e.g. August Chapter Mtg - Cloud Security"
                 required
                 data-testid="input-event-description"
               />
+              <p className="text-xs text-muted-foreground">
+                Appears as the Title in each member's ISC2 record. Max 100 characters — commas and quotes are not allowed and will be removed automatically.
+              </p>
             </div>
 
             <div className="pt-4 flex justify-end gap-4">

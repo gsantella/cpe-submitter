@@ -145,7 +145,7 @@ export default function NewEvent() {
                   />
                   <div>
                     <div className="font-semibold text-sm">Group B</div>
-                    <div className="text-xs text-muted-foreground mt-1">Professional development</div>
+                    <div className="text-xs text-muted-foreground mt-1">Management/Officer meetings, no domain</div>
                   </div>
                 </label>
               </div>

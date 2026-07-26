@@ -112,7 +112,7 @@ export default function NewEvent() {
                   required
                   data-testid="input-cpe-credits"
                 />
-                <p className="text-xs text-muted-foreground">.25, .50, .75, or 1 per hour — MAX 40 CPEs per submission</p>
+                <p className="text-xs text-muted-foreground">.25, .50, .75, or 1 per hour — MAX 40 CPEs</p>
               </div>
             </div>
 

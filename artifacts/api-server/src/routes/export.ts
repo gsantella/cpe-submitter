@@ -102,11 +102,10 @@ router.get("/events/:id/export", async (req, res): Promise<void> => {
     const rowNum = 7 + idx;
     const row = sheet.getRow(rowNum);
 
-    // For rows beyond the pre-formatted template range, copy styles from row 7
-    if (rowNum > 20) {
-      for (let col = 1; col <= TEMPLATE_DATA_COLS; col++) {
-        row.getCell(col).style = { ...templateRowStyles[col - 1] };
-      }
+    // Always apply the template row's styles so font and borders are
+    // consistent regardless of how many attendees the event has.
+    for (let col = 1; col <= TEMPLATE_DATA_COLS; col++) {
+      row.getCell(col).style = { ...templateRowStyles[col - 1] };
     }
 
     // Column A: ISC2 Member ID — stored as a number with integer format to

@@ -129,8 +129,8 @@ export const ListEventsResponse = zod.array(ListEventsResponseItem)
  * @summary Create a new event
  */
 
-export const createEventBodyCpeCreditsMin = 0.5;
-export const createEventBodyCpeCreditsMax = 10;
+export const createEventBodyCpeCreditsMin = 0.25;
+export const createEventBodyCpeCreditsMax = 40;
 
 export const createEventBodyDescriptionMax = 100;
 
@@ -183,8 +183,8 @@ export const UpdateEventParams = zod.object({
 })
 
 
-export const updateEventBodyCpeCreditsMin = 0.5;
-export const updateEventBodyCpeCreditsMax = 10;
+export const updateEventBodyCpeCreditsMin = 0.25;
+export const updateEventBodyCpeCreditsMax = 40;
 
 export const updateEventBodyDescriptionMax = 100;
 

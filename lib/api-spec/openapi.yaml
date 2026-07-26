@@ -504,8 +504,8 @@ components:
           enum: ["Group A", "Group B"]
         cpeCredits:
           type: number
-          minimum: 0.5
-          maximum: 10
+          minimum: 0.25
+          maximum: 40
         description:
           type: string
           maxLength: 100
@@ -523,8 +523,8 @@ components:
           enum: ["Group A", "Group B"]
         cpeCredits:
           type: number
-          minimum: 0.5
-          maximum: 10
+          minimum: 0.25
+          maximum: 40
         description:
           type: string
           maxLength: 100

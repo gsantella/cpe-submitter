@@ -13,8 +13,8 @@ export interface EventUpdate {
   date?: string;
   groupType?: EventUpdateGroupType;
   /**
-     * @minimum 0.5
-     * @maximum 10
+     * @minimum 0.25
+     * @maximum 40
      */
   cpeCredits?: number;
   /** @maxLength 100 */

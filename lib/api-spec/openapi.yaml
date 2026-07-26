@@ -490,6 +490,7 @@ components:
         isc2Number:
           type: string
           minLength: 1
+          pattern: '^\d+$'
 
     MemberUpdate:
       type: object
@@ -503,6 +504,7 @@ components:
         isc2Number:
           type: string
           minLength: 1
+          pattern: '^\d+$'
 
     Event:
       type: object

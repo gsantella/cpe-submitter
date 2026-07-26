@@ -135,8 +135,10 @@ export default function Members() {
                   <label className="text-sm font-medium">ISC2 Number</label>
                   <Input
                     value={newMember.isc2Number}
-                    onChange={e => setNewMember({ ...newMember, isc2Number: e.target.value })}
+                    onChange={e => setNewMember({ ...newMember, isc2Number: e.target.value.replace(/\D/g, "") })}
                     placeholder="123456"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     data-testid="input-isc2-number"
                     required
                   />

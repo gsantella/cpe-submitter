@@ -11,6 +11,9 @@ export interface MemberUpdate {
   firstName?: string;
   /** @minLength 1 */
   lastName?: string;
-  /** @minLength 1 */
+  /**
+     * @minLength 1
+     * @pattern ^\d+$
+     */
   isc2Number?: string;
 }

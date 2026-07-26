@@ -40,11 +40,13 @@ export const ListMembersResponse = zod.array(ListMembersResponseItem)
 
 
 
+export const createMemberBodyIsc2NumberRegExp = new RegExp('^\\d+$');
+
 
 export const CreateMemberBody = zod.object({
   "firstName": zod.string().min(1),
   "lastName": zod.string().min(1),
-  "isc2Number": zod.string().min(1)
+  "isc2Number": zod.string().min(1).regex(createMemberBodyIsc2NumberRegExp)
 })
 
 export const CreateMemberResponse = zod.object({
@@ -83,11 +85,13 @@ export const UpdateMemberParams = zod.object({
 
 
 
+export const updateMemberBodyIsc2NumberRegExp = new RegExp('^\\d+$');
+
 
 export const UpdateMemberBody = zod.object({
   "firstName": zod.string().min(1).optional(),
   "lastName": zod.string().min(1).optional(),
-  "isc2Number": zod.string().min(1).optional()
+  "isc2Number": zod.string().min(1).regex(updateMemberBodyIsc2NumberRegExp).optional()
 })
 
 export const UpdateMemberResponse = zod.object({

@@ -299,3 +299,27 @@ export const GetDashboardStatsResponse = zod.object({
 })
 
 
+/**
+ * @summary Get chapter settings
+ */
+export const GetSettingsResponse = zod.object({
+  "chapterName": zod.string()
+})
+
+
+/**
+ * @summary Update chapter settings
+ */
+export const updateSettingsBodyChapterNameMax = 200;
+
+
+
+export const UpdateSettingsBody = zod.object({
+  "chapterName": zod.string().max(updateSettingsBodyChapterNameMax)
+})
+
+export const UpdateSettingsResponse = zod.object({
+  "chapterName": zod.string()
+})
+
+

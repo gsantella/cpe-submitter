@@ -18,6 +18,8 @@ tags:
     description: Event attendance
   - name: stats
     description: Dashboard statistics
+  - name: settings
+    description: Chapter settings
 paths:
   /healthz:
     get:
@@ -406,6 +408,42 @@ paths:
               schema:
                 $ref: "#/components/schemas/DashboardStats"
 
+  /settings:
+    get:
+      operationId: getSettings
+      tags: [settings]
+      summary: Get chapter settings
+      responses:
+        "200":
+          description: Current settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+    put:
+      operationId: updateSettings
+      tags: [settings]
+      summary: Update chapter settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SettingsInput"
+      responses:
+        "200":
+          description: Updated settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -551,6 +589,21 @@ components:
         memberId:
           type: integer
           description: ID of existing member to check in
+
+    Settings:
+      type: object
+      required: [chapterName]
+      properties:
+        chapterName:
+          type: string
+
+    SettingsInput:
+      type: object
+      required: [chapterName]
+      properties:
+        chapterName:
+          type: string
+          maxLength: 200
 
     DashboardStats:
       type: object

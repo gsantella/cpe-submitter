@@ -117,6 +117,15 @@ export interface AttendeeInput {
   memberId: number;
 }
 
+export interface Settings {
+  chapterName: string;
+}
+
+export interface SettingsInput {
+  /** @maxLength 200 */
+  chapterName: string;
+}
+
 export interface DashboardStats {
   totalMembers: number;
   totalEvents: number;

@@ -5,6 +5,7 @@ import eventsRouter from "./events";
 import attendeesRouter from "./attendees";
 import exportRouter from "./export";
 import statsRouter from "./stats";
+import settingsRouter from "./settings";
 
 const router: IRouter = Router();
 
@@ -14,5 +15,6 @@ router.use(eventsRouter);
 router.use(attendeesRouter);
 router.use(exportRouter);
 router.use(statsRouter);
+router.use(settingsRouter);
 
 export default router;

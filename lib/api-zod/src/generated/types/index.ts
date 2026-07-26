@@ -21,3 +21,5 @@ export * from './listMembersParams';
 export * from './member';
 export * from './memberInput';
 export * from './memberUpdate';
+export * from './settings';
+export * from './settingsInput';

@@ -2,7 +2,7 @@ import { Router, type IRouter } from "express";
 import { eq } from "drizzle-orm";
 import path from "path";
 import ExcelJS from "exceljs";
-import { db, eventsTable, eventAttendeesTable, membersTable } from "@workspace/db";
+import { db, eventsTable, eventAttendeesTable, membersTable, settingsTable } from "@workspace/db";
 
 const router: IRouter = Router();
 
@@ -29,8 +29,11 @@ router.get("/events/:id/export", async (req, res): Promise<void> => {
     return;
   }
 
-  // Load event
-  const [event] = await db.select().from(eventsTable).where(eq(eventsTable.id, id));
+  // Load event and settings in parallel
+  const [[event], [settings]] = await Promise.all([
+    db.select().from(eventsTable).where(eq(eventsTable.id, id)),
+    db.select().from(settingsTable).where(eq(settingsTable.id, 1)),
+  ]);
   if (!event) {
     res.status(404).json({ error: "Event not found" });
     return;
@@ -60,6 +63,10 @@ router.get("/events/:id/export", async (req, res): Promise<void> => {
     res.status(500).json({ error: "Template sheet not found" });
     return;
   }
+
+  // Set chapter name in cell B2
+  const b2 = sheet.getCell("B2");
+  b2.value = settings?.chapterName || "";
 
   // Set Group type in cell E2 using the full ISC2 label
   const groupTypeLabels: Record<string, string> = {

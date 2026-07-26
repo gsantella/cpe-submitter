@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Users, CalendarDays, PlusCircle } from "lucide-react";
+import { LayoutDashboard, Users, CalendarDays, PlusCircle, Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface LayoutProps {
@@ -13,6 +13,7 @@ export default function Layout({ children }: LayoutProps) {
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
     { name: "Members", href: "/members", icon: Users },
     { name: "Events", href: "/events", icon: CalendarDays },
+    { name: "Chapter", href: "/chapter", icon: Building2 },
   ];
 
   return (

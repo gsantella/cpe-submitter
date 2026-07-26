@@ -10,6 +10,7 @@ import Members from '@/pages/members';
 import Events from '@/pages/events';
 import NewEvent from '@/pages/event-new';
 import EventDetail from '@/pages/event-detail';
+import Chapter from '@/pages/chapter';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +30,7 @@ function Router() {
         <Route path="/events" component={Events} />
         <Route path="/events/new" component={NewEvent} />
         <Route path="/events/:id" component={EventDetail} />
+        <Route path="/chapter" component={Chapter} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

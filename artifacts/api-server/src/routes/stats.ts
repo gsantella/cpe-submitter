@@ -33,7 +33,7 @@ router.get("/stats", async (_req, res): Promise<void> => {
     .leftJoin(eventAttendeesTable, eq(eventsTable.id, eventAttendeesTable.eventId))
     .groupBy(eventsTable.id)
     .orderBy(sql`${eventsTable.date} desc`)
-    .limit(5);
+    .limit(3);
 
   const stats = {
     totalMembers: totalMembersResult.count,

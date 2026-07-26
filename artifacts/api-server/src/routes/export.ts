@@ -76,6 +76,14 @@ router.get("/events/:id/export", async (req, res): Promise<void> => {
   const e2 = sheet.getCell("E2");
   e2.value = groupTypeLabels[event.groupType] ?? event.groupType;
 
+  // Capture per-cell styles from the first data row (row 7) before clearing,
+  // so we can reapply them to any overflow rows beyond the template's pre-formatted range.
+  const TEMPLATE_DATA_COLS = 6;
+  const templateRowStyles = Array.from({ length: TEMPLATE_DATA_COLS }, (_, i) => {
+    const cell = sheet.getRow(7).getCell(i + 1);
+    return JSON.parse(JSON.stringify(cell.style ?? {})) as ExcelJS.Style;
+  });
+
   // Clear any existing attendee data rows (7+) from the template sample data
   for (let rowNum = 7; rowNum <= 20; rowNum++) {
     const row = sheet.getRow(rowNum);
@@ -94,9 +102,20 @@ router.get("/events/:id/export", async (req, res): Promise<void> => {
     const rowNum = 7 + idx;
     const row = sheet.getRow(rowNum);
 
-    // Column A: ISC2 Member ID (numeric — strip non-digits for storage as number if possible)
+    // For rows beyond the pre-formatted template range, copy styles from row 7
+    if (rowNum > 20) {
+      for (let col = 1; col <= TEMPLATE_DATA_COLS; col++) {
+        row.getCell(col).style = { ...templateRowStyles[col - 1] };
+      }
+    }
+
+    // Column A: ISC2 Member ID — stored as a number with integer format to
+    // prevent scientific notation for large IDs (e.g. 333211121221212).
     const numId = Number(attendee.isc2Number);
-    row.getCell(1).value = isNaN(numId) ? attendee.isc2Number : numId;
+    const cellA = row.getCell(1);
+    cellA.value = isNaN(numId) ? attendee.isc2Number : numId;
+    if (!isNaN(numId)) cellA.numFmt = "0";
+
     row.getCell(2).value = attendee.firstName;   // B: First Name
     row.getCell(3).value = attendee.lastName;    // C: Last Name
     row.getCell(4).value = event.description;    // D: Description

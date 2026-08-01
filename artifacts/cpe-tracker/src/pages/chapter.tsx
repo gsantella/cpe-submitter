@@ -173,7 +173,7 @@ export default function Chapter() {
                   data-testid="input-chapter-name"
                 />
                 <p className="text-xs text-muted-foreground">
-                  This appears in cell B2 of every exported ISC2 CPE submission spreadsheet.
+                  This appears in the ISC2 CPE submission spreadsheet
                 </p>
               </div>
               <Button

@@ -17,6 +17,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { Download, Search, CheckCircle2, UserPlus, XCircle, Loader2 } from "lucide-react";
 import { format } from "date-fns";
@@ -30,6 +40,7 @@ export default function EventDetail() {
   const [memberSearch, setMemberSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [newMember, setNewMember] = useState({ firstName: "", lastName: "", isc2Number: "" });
+  const [removeTarget, setRemoveTarget] = useState<number | null>(null);
 
   const { data: event, isLoading: isLoadingEvent } = useGetEvent(eventId, {
     query: { enabled: !!eventId, queryKey: getGetEventQueryKey(eventId) }
@@ -101,9 +112,13 @@ export default function EventDetail() {
   };
 
   const handleRemove = (memberId: number) => {
-    if (confirm("Remove this attendee?")) {
-      removeAttendee.mutate({ id: eventId, memberId });
-    }
+    setRemoveTarget(memberId);
+  };
+
+  const handleRemoveConfirm = () => {
+    if (removeTarget === null) return;
+    removeAttendee.mutate({ id: eventId, memberId: removeTarget });
+    setRemoveTarget(null);
   };
 
   const attendeeIds = useMemo(() => new Set(attendees?.map(a => a.memberId) || []), [attendees]);
@@ -358,6 +373,26 @@ export default function EventDetail() {
         </div>
 
       </div>
+
+      <AlertDialog open={removeTarget !== null} onOpenChange={open => { if (!open) setRemoveTarget(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove attendee?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove the check-in for this attendee. You can check them in again if needed.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={handleRemoveConfirm}
+            >
+              Remove
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

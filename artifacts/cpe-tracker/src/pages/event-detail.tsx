@@ -200,7 +200,7 @@ export default function EventDetail() {
                               <div className="font-mono text-xs text-muted-foreground">{member.isc2Number}</div>
                             </div>
                             {isCheckedIn ? (
-                              <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200 dark:border-green-800">
+                              <Badge variant="default" className="bg-primary/10 text-primary border-primary/20 dark:bg-primary/20 dark:text-primary-foreground">
                                 <CheckCircle2 className="w-3 h-3 mr-1" /> In
                               </Badge>
                             ) : (

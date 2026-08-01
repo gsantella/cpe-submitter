@@ -66,7 +66,7 @@ export default function Layout({ children }: LayoutProps) {
         </button>
         <div className="flex flex-col">
           <span className="relative text-sidebar-foreground font-bold text-lg leading-none tracking-tight">
-            ISC2<span className="absolute -bottom-1 right-0 w-3 h-0.5 rounded-full" style={{background:'#9AC23C'}}></span>
+            ISC2<span className="absolute bottom-0 right-0 w-3 h-0.5 rounded-full" style={{background:'#9AC23C'}}></span>
           </span>
           <span className="text-sidebar-foreground/60 text-xs font-medium mt-1.5">CPE Tracker</span>
         </div>
@@ -82,7 +82,7 @@ export default function Layout({ children }: LayoutProps) {
           <div className="h-16 flex items-center px-6 border-b border-sidebar-border flex-shrink-0">
             <div className="flex flex-col">
               <span className="relative text-sidebar-foreground font-bold text-xl leading-none tracking-tight">
-                ISC2<span className="absolute -bottom-1 right-0 w-3.5 h-0.5 rounded-full" style={{background:'#9AC23C'}}></span>
+                ISC2<span className="absolute bottom-0 right-0 w-3.5 h-0.5 rounded-full" style={{background:'#9AC23C'}}></span>
               </span>
               <span className="text-sidebar-foreground/60 text-xs font-medium mt-1.5">CPE Tracker</span>
             </div>
@@ -125,7 +125,7 @@ export default function Layout({ children }: LayoutProps) {
         <div className="h-16 flex items-center px-6 border-b border-sidebar-border">
           <div className="flex flex-col">
             <span className="relative text-sidebar-foreground font-bold text-xl leading-none tracking-tight">
-              ISC2<span className="absolute -bottom-1 right-0 w-3.5 h-0.5 rounded-full" style={{background:'#9AC23C'}}></span>
+              ISC2<span className="absolute bottom-0 right-0 w-3.5 h-0.5 rounded-full" style={{background:'#9AC23C'}}></span>
             </span>
             <span className="text-sidebar-foreground/60 text-xs font-medium mt-1.5">CPE Tracker</span>
           </div>

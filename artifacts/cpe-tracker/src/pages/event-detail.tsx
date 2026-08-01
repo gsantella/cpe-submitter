@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
+import { useDebounce } from "use-debounce";
 import { useParams } from "wouter";
 import { 
   useGetEvent, 
@@ -38,7 +39,7 @@ export default function EventDetail() {
   const queryClient = useQueryClient();
 
   const [memberSearch, setMemberSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [debouncedSearch] = useDebounce(memberSearch, 300);
   const [newMember, setNewMember] = useState({ firstName: "", lastName: "", isc2Number: "" });
   const [removeTarget, setRemoveTarget] = useState<number | null>(null);
 
@@ -49,12 +50,6 @@ export default function EventDetail() {
   const { data: attendees, isLoading: isLoadingAttendees } = useListEventAttendees(eventId, {
     query: { enabled: !!eventId, queryKey: getListEventAttendeesQueryKey(eventId) }
   });
-
-  // Handle search debounce for existing members
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(memberSearch), 300);
-    return () => clearTimeout(timer);
-  }, [memberSearch]);
 
   const { data: searchResults, isLoading: isLoadingSearch } = useListMembers(
     { search: debouncedSearch || undefined },

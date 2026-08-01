@@ -13,6 +13,8 @@ export default function NewEvent() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
+  const [descriptionTouched, setDescriptionTouched] = useState(false);
+
   const [formData, setFormData] = useState<{
     name: string;
     date: string;
@@ -57,6 +59,7 @@ export default function NewEvent() {
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescriptionTouched(true);
     const val = e.target.value.replace(/[,"']/g, ""); // Strip commas and single/double quotes
     if (val.length <= 100) {
       setFormData(prev => ({ ...prev, description: val }));
@@ -78,7 +81,16 @@ export default function NewEvent() {
               <Input 
                 id="name"
                 value={formData.name}
-                onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                onChange={e => {
+                  const name = e.target.value;
+                  setFormData(prev => ({
+                    ...prev,
+                    name,
+                    ...(descriptionTouched ? {} : {
+                      description: name.replace(/[,"']/g, "").slice(0, 100)
+                    })
+                  }));
+                }}
                 placeholder="e.g. Q3 Chapter Meeting"
                 required
                 data-testid="input-event-name"

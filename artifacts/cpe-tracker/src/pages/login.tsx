@@ -44,7 +44,7 @@ export default function Login() {
         <div className="flex flex-col items-center gap-2 text-center">
           <div className="flex flex-col items-center mb-1">
             <span className="relative font-bold text-3xl leading-none tracking-tight text-foreground">
-              ISC2<span className="absolute bottom-0 right-0 w-4 h-1 rounded-full" style={{background:'#9AC23C'}}></span>
+              ISC2<span className="absolute top-0 -right-2 w-0.5 h-full rounded-full" style={{background:'#9AC23C'}}></span>
             </span>
             <span className="text-muted-foreground text-sm font-medium mt-2">CPE Tracker</span>
           </div>

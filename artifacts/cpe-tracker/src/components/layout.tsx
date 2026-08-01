@@ -77,7 +77,7 @@ export default function Layout({ children }: LayoutProps) {
       <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
         <SheetContent
           side="left"
-          className="w-72 p-0 bg-sidebar border-sidebar-border flex flex-col"
+          className="w-72 p-0 bg-sidebar border-sidebar-border flex flex-col [&>button]:text-sidebar-foreground"
         >
           {/* Drawer header */}
           <div className="h-16 flex items-center px-6 border-b border-sidebar-border flex-shrink-0">

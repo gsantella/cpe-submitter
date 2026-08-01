@@ -13,7 +13,7 @@ export default function Dashboard() {
     return (
       <div className="space-y-6">
         <div className="h-8 w-48 bg-muted animate-pulse rounded"></div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
             <Card key={i}>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -34,10 +34,9 @@ export default function Dashboard() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Overview of chapter members and events.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Members</CardTitle>

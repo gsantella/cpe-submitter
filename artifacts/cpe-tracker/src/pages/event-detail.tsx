@@ -315,7 +315,7 @@ export default function EventDetail() {
                             {attendee.firstName} {attendee.lastName}
                           </div>
                           <div className="font-mono text-xs text-muted-foreground">
-                            {attendee.isc2Number} · {format(new Date(attendee.checkedInAt), "HH:mm")}
+                            {attendee.isc2Number}
                           </div>
                         </div>
                         <button
@@ -337,7 +337,6 @@ export default function EventDetail() {
                         <TableRow>
                           <TableHead>Member</TableHead>
                           <TableHead>ISC2 Number</TableHead>
-                          <TableHead>Time</TableHead>
                           <TableHead className="w-[50px]"></TableHead>
                         </TableRow>
                       </TableHeader>
@@ -348,9 +347,6 @@ export default function EventDetail() {
                               {attendee.firstName} {attendee.lastName}
                             </TableCell>
                             <TableCell className="font-mono text-sm">{attendee.isc2Number}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
-                              {format(new Date(attendee.checkedInAt), "HH:mm")}
-                            </TableCell>
                             <TableCell>
                               <button
                                 onClick={() => handleRemove(attendee.memberId)}

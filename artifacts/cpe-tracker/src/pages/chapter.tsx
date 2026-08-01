@@ -274,7 +274,7 @@ export default function Chapter() {
                 />
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 <Button type="submit" disabled={credsSaving}>
                   {credsSaving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                   {creds?.enabled ? "Update Credentials" : "Enable Sign-In"}

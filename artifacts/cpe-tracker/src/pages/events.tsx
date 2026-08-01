@@ -15,7 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, ArrowRight, Loader2, Trash2 } from "lucide-react";
+import { Plus, ArrowRight, Loader2, Trash2, Users, Award } from "lucide-react";
 import { Link } from "wouter";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
@@ -73,55 +73,115 @@ export default function Events() {
             No events found. Create one to get started.
           </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Event Name</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead className="text-right">Credits</TableHead>
-                <TableHead className="text-right">Attendees</TableHead>
-                <TableHead></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <>
+            {/* ── Mobile card list (hidden on sm+) ── */}
+            <div className="sm:hidden divide-y divide-border">
               {events.map(event => (
-                <TableRow key={event.id} data-testid={`row-event-${event.id}`}>
-                  <TableCell className="font-mono text-sm whitespace-nowrap">
-                    {format(new Date(event.date), "yyyy-MM-dd")}
-                  </TableCell>
-                  <TableCell className="font-medium">{event.name}</TableCell>
-                  <TableCell>
-                    <Badge variant={event.groupType === "Group A" ? "default" : "secondary"}>
+                <div
+                  key={event.id}
+                  className="px-4 py-3 space-y-2"
+                  data-testid={`row-event-${event.id}`}
+                >
+                  {/* Name + badge row */}
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="font-medium text-foreground leading-snug">{event.name}</p>
+                    <Badge
+                      variant={event.groupType === "Group A" ? "default" : "secondary"}
+                      className="flex-shrink-0"
+                    >
                       {event.groupType}
                     </Badge>
-                  </TableCell>
-                  <TableCell className="text-right font-mono">{event.cpeCredits}</TableCell>
-                  <TableCell className="text-right font-mono">{event.attendeeCount}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-muted-foreground hover:text-destructive"
-                        onClick={() => setDeleteTarget({ id: event.id, name: event.name })}
-                        data-testid={`button-delete-event-${event.id}`}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                      <Link
-                        href={`/events/${event.id}`}
-                        className="inline-flex items-center text-sm font-medium text-primary hover:underline"
-                        data-testid={`link-manage-${event.id}`}
-                      >
-                        Manage <ArrowRight className="w-4 h-4 ml-1" />
-                      </Link>
-                    </div>
-                  </TableCell>
-                </TableRow>
+                  </div>
+
+                  {/* Date + stats row */}
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span className="font-mono">{format(new Date(event.date), "yyyy-MM-dd")}</span>
+                    <span className="flex items-center gap-1">
+                      <Award className="w-3.5 h-3.5" />
+                      {event.cpeCredits} CPE
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Users className="w-3.5 h-3.5" />
+                      {event.attendeeCount}
+                    </span>
+                  </div>
+
+                  {/* Actions row */}
+                  <div className="flex items-center gap-2 pt-1">
+                    <Link
+                      href={`/events/${event.id}`}
+                      className="inline-flex items-center text-sm font-medium text-primary hover:underline"
+                      data-testid={`link-manage-${event.id}`}
+                    >
+                      Manage Check-ins <ArrowRight className="w-4 h-4 ml-1" />
+                    </Link>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="ml-auto text-muted-foreground hover:text-destructive"
+                      onClick={() => setDeleteTarget({ id: event.id, name: event.name })}
+                      data-testid={`button-delete-event-${event.id}`}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+
+            {/* ── Desktop table (hidden on mobile) ── */}
+            <div className="hidden sm:block">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Event Name</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead className="text-right">Credits</TableHead>
+                    <TableHead className="text-right">Attendees</TableHead>
+                    <TableHead></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {events.map(event => (
+                    <TableRow key={event.id} data-testid={`row-event-${event.id}`}>
+                      <TableCell className="font-mono text-sm whitespace-nowrap">
+                        {format(new Date(event.date), "yyyy-MM-dd")}
+                      </TableCell>
+                      <TableCell className="font-medium">{event.name}</TableCell>
+                      <TableCell>
+                        <Badge variant={event.groupType === "Group A" ? "default" : "secondary"}>
+                          {event.groupType}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right font-mono">{event.cpeCredits}</TableCell>
+                      <TableCell className="text-right font-mono">{event.attendeeCount}</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-muted-foreground hover:text-destructive"
+                            onClick={() => setDeleteTarget({ id: event.id, name: event.name })}
+                            data-testid={`button-delete-event-${event.id}`}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                          <Link
+                            href={`/events/${event.id}`}
+                            className="inline-flex items-center text-sm font-medium text-primary hover:underline"
+                            data-testid={`link-manage-${event.id}`}
+                          >
+                            Manage <ArrowRight className="w-4 h-4 ml-1" />
+                          </Link>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </>
         )}
       </Card>
 

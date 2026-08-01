@@ -181,40 +181,74 @@ export default function Members() {
             No members found matching your search.
           </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ISC2 Number</TableHead>
-                <TableHead>First Name</TableHead>
-                <TableHead>Last Name</TableHead>
-                <TableHead>Date Added</TableHead>
-                <TableHead></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <>
+            {/* ── Mobile card list (hidden on sm+) ── */}
+            <div className="sm:hidden divide-y divide-border">
               {members.map(member => (
-                <TableRow key={member.id} data-testid={`row-member-${member.id}`}>
-                  <TableCell className="font-mono font-medium">{member.isc2Number}</TableCell>
-                  <TableCell>{member.firstName}</TableCell>
-                  <TableCell>{member.lastName}</TableCell>
-                  <TableCell className="text-muted-foreground text-sm">
-                    {new Date(member.createdAt).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-muted-foreground hover:text-destructive"
-                      onClick={() => setDeleteTarget({ id: member.id, name: `${member.firstName} ${member.lastName}` })}
-                      data-testid={`button-delete-member-${member.id}`}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
+                <div
+                  key={member.id}
+                  className="flex items-center justify-between px-4 py-3 gap-3"
+                  data-testid={`row-member-${member.id}`}
+                >
+                  <div className="min-w-0">
+                    <p className="font-medium text-foreground truncate">
+                      {member.firstName} {member.lastName}
+                    </p>
+                    <p className="text-sm text-muted-foreground font-mono mt-0.5">
+                      {member.isc2Number}
+                    </p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="flex-shrink-0 text-muted-foreground hover:text-destructive"
+                    onClick={() => setDeleteTarget({ id: member.id, name: `${member.firstName} ${member.lastName}` })}
+                    data-testid={`button-delete-member-${member.id}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+
+            {/* ── Desktop table (hidden on mobile) ── */}
+            <div className="hidden sm:block">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ISC2 Number</TableHead>
+                    <TableHead>First Name</TableHead>
+                    <TableHead>Last Name</TableHead>
+                    <TableHead>Date Added</TableHead>
+                    <TableHead></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {members.map(member => (
+                    <TableRow key={member.id} data-testid={`row-member-${member.id}`}>
+                      <TableCell className="font-mono font-medium">{member.isc2Number}</TableCell>
+                      <TableCell>{member.firstName}</TableCell>
+                      <TableCell>{member.lastName}</TableCell>
+                      <TableCell className="text-muted-foreground text-sm">
+                        {new Date(member.createdAt).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-muted-foreground hover:text-destructive"
+                          onClick={() => setDeleteTarget({ id: member.id, name: `${member.firstName} ${member.lastName}` })}
+                          data-testid={`button-delete-member-${member.id}`}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </>
         )}
       </Card>
 

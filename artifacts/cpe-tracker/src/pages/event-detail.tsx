@@ -283,39 +283,72 @@ export default function EventDetail() {
                   <p>No attendees checked in yet.</p>
                 </div>
               ) : (
-                <Table>
-                  <TableHeader className="sticky top-0 bg-card z-10 shadow-sm">
-                    <TableRow>
-                      <TableHead>Member</TableHead>
-                      <TableHead>ISC2 Number</TableHead>
-                      <TableHead>Time</TableHead>
-                      <TableHead className="w-[50px]"></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
+                <>
+                  {/* Mobile: stacked card list */}
+                  <div className="sm:hidden divide-y divide-border">
                     {attendees.map(attendee => (
-                      <TableRow key={attendee.memberId} data-testid={`row-attendee-${attendee.memberId}`}>
-                        <TableCell className="font-medium">
-                          {attendee.firstName} {attendee.lastName}
-                        </TableCell>
-                        <TableCell className="font-mono text-sm">{attendee.isc2Number}</TableCell>
-                        <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
-                          {format(new Date(attendee.checkedInAt), "HH:mm")}
-                        </TableCell>
-                        <TableCell>
-                          <button 
-                            onClick={() => handleRemove(attendee.memberId)}
-                            className="text-muted-foreground hover:text-destructive transition-colors"
-                            title="Remove check-in"
-                            data-testid={`button-remove-attendee-${attendee.memberId}`}
-                          >
-                            <XCircle className="w-4 h-4" />
-                          </button>
-                        </TableCell>
-                      </TableRow>
+                      <div
+                        key={attendee.memberId}
+                        className="flex items-center justify-between px-4 py-3"
+                        data-testid={`row-attendee-${attendee.memberId}`}
+                      >
+                        <div>
+                          <div className="font-medium text-sm">
+                            {attendee.firstName} {attendee.lastName}
+                          </div>
+                          <div className="font-mono text-xs text-muted-foreground">
+                            {attendee.isc2Number} · {format(new Date(attendee.checkedInAt), "HH:mm")}
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => handleRemove(attendee.memberId)}
+                          className="ml-3 text-muted-foreground hover:text-destructive transition-colors flex-shrink-0"
+                          title="Remove check-in"
+                          data-testid={`button-remove-attendee-${attendee.memberId}`}
+                        >
+                          <XCircle className="w-5 h-5" />
+                        </button>
+                      </div>
                     ))}
-                  </TableBody>
-                </Table>
+                  </div>
+
+                  {/* Desktop: table */}
+                  <div className="hidden sm:block">
+                    <Table>
+                      <TableHeader className="sticky top-0 bg-card z-10 shadow-sm">
+                        <TableRow>
+                          <TableHead>Member</TableHead>
+                          <TableHead>ISC2 Number</TableHead>
+                          <TableHead>Time</TableHead>
+                          <TableHead className="w-[50px]"></TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {attendees.map(attendee => (
+                          <TableRow key={attendee.memberId} data-testid={`row-attendee-${attendee.memberId}`}>
+                            <TableCell className="font-medium">
+                              {attendee.firstName} {attendee.lastName}
+                            </TableCell>
+                            <TableCell className="font-mono text-sm">{attendee.isc2Number}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
+                              {format(new Date(attendee.checkedInAt), "HH:mm")}
+                            </TableCell>
+                            <TableCell>
+                              <button
+                                onClick={() => handleRemove(attendee.memberId)}
+                                className="text-muted-foreground hover:text-destructive transition-colors"
+                                title="Remove check-in"
+                                data-testid={`button-remove-attendee-${attendee.memberId}`}
+                              >
+                                <XCircle className="w-4 h-4" />
+                              </button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </>
               )}
             </div>
           </Card>

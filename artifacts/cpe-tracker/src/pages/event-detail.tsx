@@ -168,7 +168,7 @@ export default function EventDetail() {
                   placeholder="Search by name or ISC2 number..." 
                   value={memberSearch}
                   onChange={e => setMemberSearch(e.target.value)}
-                  className="pl-9"
+                  className="pl-9 text-base"
                   data-testid="input-search-checkin"
                 />
               </div>
@@ -184,7 +184,7 @@ export default function EventDetail() {
                       {searchResults.map(member => {
                         const isCheckedIn = attendeeIds.has(member.id);
                         return (
-                          <div key={member.id} className="p-3 flex items-center justify-between hover:bg-muted/50 transition-colors">
+                          <div key={member.id} className="p-3 min-h-[44px] flex items-center justify-between hover:bg-muted/50 transition-colors">
                             <div>
                               <div className="font-medium text-sm">{member.firstName} {member.lastName}</div>
                               <div className="font-mono text-xs text-muted-foreground">{member.isc2Number}</div>
@@ -222,13 +222,14 @@ export default function EventDetail() {
             </CardHeader>
             <CardContent className="pt-6">
               <form onSubmit={handleCreateAndCheckIn} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-medium">First Name</label>
                     <Input 
                       value={newMember.firstName} 
                       onChange={e => setNewMember({ ...newMember, firstName: e.target.value })}
                       required
+                      className="text-base"
                       data-testid="input-new-first-name"
                     />
                   </div>
@@ -238,6 +239,7 @@ export default function EventDetail() {
                       value={newMember.lastName} 
                       onChange={e => setNewMember({ ...newMember, lastName: e.target.value })}
                       required
+                      className="text-base"
                       data-testid="input-new-last-name"
                     />
                   </div>
@@ -248,6 +250,7 @@ export default function EventDetail() {
                     value={newMember.isc2Number} 
                     onChange={e => setNewMember({ ...newMember, isc2Number: e.target.value })}
                     required
+                    className="text-base"
                     data-testid="input-new-isc2-number"
                   />
                 </div>

@@ -143,7 +143,7 @@ export default function Chapter() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Chapter Settings</h1>
-        <p className="text-muted-foreground mt-1">Configure your ISC2 chapter information.</p>
+        <p className="text-muted-foreground mt-1">Configure your ISC2 chapter information</p>
       </div>
 
       {/* Chapter Name */}

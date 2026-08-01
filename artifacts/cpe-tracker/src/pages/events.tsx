@@ -54,7 +54,7 @@ export default function Events() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground">Events</h1>
-          <p className="text-muted-foreground mt-1">Manage chapter meetings and track CPE attendance.</p>
+          <p className="text-muted-foreground mt-1">Manage chapter meetings and track CPE attendance</p>
         </div>
         <Link href="/events/new" className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2" data-testid="button-create-event">
           <Plus className="w-4 h-4 mr-2" />

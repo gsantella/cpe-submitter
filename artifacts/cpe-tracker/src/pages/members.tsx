@@ -94,7 +94,7 @@ export default function Members() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground">Member Directory</h1>
-          <p className="text-muted-foreground mt-1">Manage and search chapter members.</p>
+          <p className="text-muted-foreground mt-1">Manage and search chapter members</p>
         </div>
         <Button onClick={() => setIsAdding(!isAdding)} data-testid="button-add-member">
           {isAdding ? "Cancel" : (

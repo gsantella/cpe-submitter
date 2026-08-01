@@ -65,10 +65,11 @@ export default function Layout({ children }: LayoutProps) {
           <Menu className="w-5 h-5" />
         </button>
         <div className="flex flex-col">
-          <span className="relative text-sidebar-foreground font-bold text-lg leading-none tracking-tight">
-            ISC2<span className="absolute top-0 -right-1.5 w-0.5 h-full rounded-full" style={{background:'#9AC23C'}}></span>
+          <span className="text-sidebar-foreground font-bold text-lg leading-none tracking-tight">ISC2</span>
+          <span className="text-sidebar-foreground/60 text-xs font-medium mt-1.5 flex items-center gap-1.5">
+            <span className="w-0.5 h-3 rounded-full flex-shrink-0" style={{background:'#9AC23C'}}></span>
+            CPE Tracker
           </span>
-          <span className="text-sidebar-foreground/60 text-xs font-medium mt-1.5">CPE Tracker</span>
         </div>
       </div>
 
@@ -81,10 +82,11 @@ export default function Layout({ children }: LayoutProps) {
           {/* Drawer header */}
           <div className="h-16 flex items-center px-6 border-b border-sidebar-border flex-shrink-0">
             <div className="flex flex-col">
-              <span className="relative text-sidebar-foreground font-bold text-xl leading-none tracking-tight">
-                ISC2<span className="absolute top-0 -right-1.5 w-0.5 h-full rounded-full" style={{background:'#9AC23C'}}></span>
+              <span className="text-sidebar-foreground font-bold text-xl leading-none tracking-tight">ISC2</span>
+              <span className="text-sidebar-foreground/60 text-xs font-medium mt-1.5 flex items-center gap-1.5">
+                <span className="w-0.5 h-3 rounded-full flex-shrink-0" style={{background:'#9AC23C'}}></span>
+                CPE Tracker
               </span>
-              <span className="text-sidebar-foreground/60 text-xs font-medium mt-1.5">CPE Tracker</span>
             </div>
           </div>
 
@@ -124,10 +126,11 @@ export default function Layout({ children }: LayoutProps) {
       <div className="hidden md:flex md:w-64 bg-sidebar border-r border-sidebar-border flex-shrink-0 flex-col">
         <div className="h-16 flex items-center px-6 border-b border-sidebar-border">
           <div className="flex flex-col">
-            <span className="relative text-sidebar-foreground font-bold text-xl leading-none tracking-tight">
-              ISC2<span className="absolute top-0 -right-1.5 w-0.5 h-full rounded-full" style={{background:'#9AC23C'}}></span>
+            <span className="text-sidebar-foreground font-bold text-xl leading-none tracking-tight">ISC2</span>
+            <span className="text-sidebar-foreground/60 text-xs font-medium mt-1.5 flex items-center gap-1.5">
+              <span className="w-0.5 h-3 rounded-full flex-shrink-0" style={{background:'#9AC23C'}}></span>
+              CPE Tracker
             </span>
-            <span className="text-sidebar-foreground/60 text-xs font-medium mt-1.5">CPE Tracker</span>
           </div>
         </div>
 

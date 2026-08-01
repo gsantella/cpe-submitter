@@ -43,10 +43,11 @@ export default function Login() {
       <div className="w-full max-w-sm space-y-6">
         <div className="flex flex-col items-center gap-2 text-center">
           <div className="flex flex-col items-center mb-1">
-            <span className="relative font-bold text-3xl leading-none tracking-tight text-foreground">
-              ISC2<span className="absolute top-0 -right-2 w-0.5 h-full rounded-full" style={{background:'#9AC23C'}}></span>
+            <span className="font-bold text-3xl leading-none tracking-tight text-foreground">ISC2</span>
+            <span className="text-muted-foreground text-sm font-medium mt-2 flex items-center gap-1.5">
+              <span className="w-0.5 h-3.5 rounded-full flex-shrink-0" style={{background:'#9AC23C'}}></span>
+              CPE Tracker
             </span>
-            <span className="text-muted-foreground text-sm font-medium mt-2">CPE Tracker</span>
           </div>
           <h1 className="text-xl font-semibold tracking-tight mt-1">Sign in to your chapter</h1>
         </div>

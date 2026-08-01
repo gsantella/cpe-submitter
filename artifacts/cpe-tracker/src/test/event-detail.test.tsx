@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, waitFor, within, act, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import EventDetail from "@/pages/event-detail";
 
@@ -229,7 +229,7 @@ describe("EventDetail – name grid at small viewport", () => {
     expect(grid).toHaveClass("sm:grid-cols-2");
   });
 
-  it("mobile attendee rows are rendered inside the sm:hidden container", () => {
+  it("mobile attendee rows are rendered inside the sm:hidden container", async () => {
     const attendees = [
       {
         memberId: 10,
@@ -255,5 +255,57 @@ describe("EventDetail – name grid at small viewport", () => {
     // The attendee row exists inside it
     const row = within(mobileList as HTMLElement).getByTestId("row-attendee-10");
     expect(row).toBeInTheDocument();
+  });
+});
+
+describe("EventDetail – member search debounce", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("rapid typing (J → Ja → Jan → Jane) only triggers useListMembers with the final value", () => {
+    render(<EventDetail />);
+    const input = screen.getByTestId("input-search-checkin");
+
+    // Simulate rapid keystrokes synchronously — each change resets the 300 ms
+    // debounce timer, so debouncedSearch stays "" until we advance the clock.
+    act(() => { fireEvent.change(input, { target: { value: "J" } }); });
+    act(() => { fireEvent.change(input, { target: { value: "Ja" } }); });
+    act(() => { fireEvent.change(input, { target: { value: "Jan" } }); });
+    act(() => { fireEvent.change(input, { target: { value: "Jane" } }); });
+
+    // Before the debounce window elapses, debouncedSearch is still "":
+    // useListMembers should not have been invoked with any search param.
+    const callsBeforeDebounce = mockUseListMembers.mock.calls.filter(
+      ([params]) => params.search !== undefined
+    );
+    expect(callsBeforeDebounce).toHaveLength(0);
+
+    // Intermediate partial values must never have been used as search params.
+    const intermediateCalls = mockUseListMembers.mock.calls.filter(([params]) =>
+      ["J", "Ja", "Jan"].includes(params.search)
+    );
+    expect(intermediateCalls).toHaveLength(0);
+
+    // Advance past the 300 ms debounce and flush the resulting React re-render.
+    // Avoid waitFor here — it polls via setTimeout which fake timers suppress.
+    act(() => { vi.advanceTimersByTime(300); });
+
+    // useListMembers must now have been called with the complete search term.
+    const finalCalls = mockUseListMembers.mock.calls.filter(
+      ([params]) => params.search === "Jane"
+    );
+    expect(finalCalls.length).toBeGreaterThan(0);
+
+    // Confirm no intermediate call snuck through after the timer advanced.
+    const noIntermediateAfter = mockUseListMembers.mock.calls.filter(([params]) =>
+      ["J", "Ja", "Jan"].includes(params.search)
+    );
+    expect(noIntermediateAfter).toHaveLength(0);
   });
 });

@@ -132,7 +132,7 @@ export default function EventDetail() {
           <p className="text-muted-foreground mt-1 max-w-2xl">{event.description}</p>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="text-right mr-2">
             <div className="text-2xl font-bold font-mono text-primary">{event.cpeCredits}</div>
             <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">CPE Credits</div>
@@ -141,7 +141,7 @@ export default function EventDetail() {
             <div className="text-2xl font-bold font-mono">{event.attendeeCount}</div>
             <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Attendees</div>
           </div>
-          <Button asChild variant="outline" className="ml-2 gap-2" data-testid="button-export">
+          <Button asChild variant="outline" className="ml-2 gap-2 w-full sm:w-auto" data-testid="button-export">
             <a href={`/api/events/${eventId}/export`} target="_blank" rel="noopener noreferrer">
               <Download className="w-4 h-4" />
               Export to Excel

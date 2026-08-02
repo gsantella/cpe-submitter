@@ -5,13 +5,19 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import * as schema from "./schema";
 
-// Resolve data dir relative to this file's location (lib/db/src -> lib/db -> workspace root)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const dataDir = join(__dirname, "../../../data");
-mkdirSync(dataDir, { recursive: true });
+// DATABASE_PATH env var overrides the default location.
+// Set it in Docker to point at the named volume (e.g. /data/cpe-tracker.db).
+// Falls back to data/ at the workspace root when running locally on Replit.
+const dbPath = process.env.DATABASE_PATH ?? (() => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  const dataDir = join(__dirname, "../../../data");
+  return join(dataDir, "cpe-tracker.db");
+})();
 
-const sqlite = new Database(join(dataDir, "cpe-tracker.db"));
+mkdirSync(dirname(dbPath), { recursive: true });
+
+const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
 
 export * from "./schema";

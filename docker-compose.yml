@@ -1,0 +1,48 @@
+services:
+  app:
+    # Self-hosters: pull the pre-built image from GitHub Container Registry
+    # (no Git, Node, or pnpm required on the host)
+    image: ghcr.io/gsantella/cpe-submitter:latest
+    # Developers: comment out the `image:` line above and uncomment `build: .`
+    # to build locally from source.
+    # build: .
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_PATH: /data/cpe-tracker.db
+      SESSION_SECRET: ${SESSION_SECRET}
+      # Optional: pre-configure sign-in credentials via env vars.
+      # If set, credentials cannot be changed from the Chapter settings page.
+      # AUTH_USERNAME: ${AUTH_USERNAME:-}
+      # AUTH_PASSWORD: ${AUTH_PASSWORD:-}
+    volumes:
+      - db_data:/data
+    networks:
+      - internal
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"   # HTTP/3
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - internal
+    depends_on:
+      - app
+
+volumes:
+  db_data:      # SQLite database — persists across container restarts
+  caddy_data:   # Caddy's TLS certificates (Let's Encrypt)
+  caddy_config: # Caddy runtime config
+
+networks:
+  internal:

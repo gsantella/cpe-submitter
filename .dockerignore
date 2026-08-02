@@ -1,0 +1,30 @@
+# Dependencies — reinstalled inside the container
+node_modules/
+**/node_modules/
+
+# Build outputs — rebuilt inside the container
+**/dist/
+artifacts/cpe-tracker/dist/
+
+# Local database — lives on a Docker volume, not in the image
+data/
+
+# Replit & editor artifacts
+.replit
+replit.nix
+.cache/
+.local/
+.upm/
+
+# Git
+.git/
+.gitignore
+
+# Environment files — never bake secrets into images
+.env
+.env.local
+
+# Test & coverage
+coverage/
+*.test.ts
+*.spec.ts

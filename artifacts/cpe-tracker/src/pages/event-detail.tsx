@@ -29,7 +29,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Download, Search, CheckCircle2, UserPlus, XCircle, Loader2 } from "lucide-react";
+import { Link } from "wouter";
+import { Download, Search, CheckCircle2, UserPlus, XCircle, Loader2, Pencil } from "lucide-react";
 import { format } from "date-fns";
 
 export default function EventDetail() {
@@ -151,7 +152,13 @@ export default function EventDetail() {
             <div className="text-2xl font-bold font-mono">{event.attendeeCount}</div>
             <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Attendees</div>
           </div>
-          <Button asChild variant="outline" className="ml-2 gap-2 w-full sm:w-auto" data-testid="button-export">
+          <Button asChild variant="outline" className="gap-2 w-full sm:w-auto" data-testid="button-edit-event">
+            <Link href={`/events/${eventId}/edit`}>
+              <Pencil className="w-4 h-4" />
+              Edit
+            </Link>
+          </Button>
+          <Button asChild variant="outline" className="gap-2 w-full sm:w-auto" data-testid="button-export">
             <a href={`/api/events/${eventId}/export`} target="_blank" rel="noopener noreferrer">
               <Download className="w-4 h-4" />
               Export to Excel
@@ -370,7 +377,7 @@ export default function EventDetail() {
           <AlertDialogHeader>
             <AlertDialogTitle>Remove attendee?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will remove the check-in for this attendee. You can check them in again if needed.
+              This will remove the check-in for this attendee. You can check them in again if needed
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

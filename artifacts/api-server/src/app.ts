@@ -1,4 +1,5 @@
 import express, { type Express } from "express";
+import path from "path";
 import cors from "cors";
 import session from "express-session";
 import pinoHttp from "pino-http";
@@ -54,5 +55,16 @@ app.use(
 );
 
 app.use("/api", router);
+
+// In production (Docker), serve the built React frontend and handle SPA routing.
+// In development on Replit, Vite's dev server handles the frontend separately.
+if (process.env.NODE_ENV === "production") {
+  const publicDir = path.join(process.cwd(), "public");
+  app.use(express.static(publicDir));
+  // Catch-all: return index.html for any non-API route so React Router works
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(publicDir, "index.html"));
+  });
+}
 
 export default app;

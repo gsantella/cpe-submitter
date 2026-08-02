@@ -70,7 +70,7 @@ export default function Events() {
           </div>
         ) : !events || events.length === 0 ? (
           <div className="p-12 text-center text-muted-foreground">
-            No events found. Create one to get started.
+            No events found. Create one to get started
           </div>
         ) : (
           <>
@@ -191,7 +191,7 @@ export default function Events() {
             <AlertDialogTitle>Delete event?</AlertDialogTitle>
             <AlertDialogDescription>
               This will permanently delete <strong>{deleteTarget?.name}</strong> and all of its
-              attendance records. This cannot be undone.
+              attendance records. This cannot be undone
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

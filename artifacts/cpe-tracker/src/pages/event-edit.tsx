@@ -1,76 +1,97 @@
-import { useState } from "react";
-import { useCreateEvent } from "@workspace/api-client-react";
-import { useLocation } from "wouter";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import { useParams, useLocation } from "wouter";
+import { useGetEvent, useUpdateEvent, getGetEventQueryKey, EventUpdateGroupType } from "@workspace/api-client-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-import { EventInputGroupType } from "@workspace/api-client-react";
 
-export default function NewEvent() {
+export default function EditEvent() {
+  const { id } = useParams();
+  const eventId = parseInt(id || "0");
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  const [descriptionTouched, setDescriptionTouched] = useState(false);
+  const { data: event, isLoading } = useGetEvent(eventId, {
+    query: { enabled: !!eventId, queryKey: getGetEventQueryKey(eventId) }
+  });
 
   const [formData, setFormData] = useState<{
     name: string;
     date: string;
-    groupType: EventInputGroupType;
+    groupType: EventUpdateGroupType;
     cpeCredits: string;
     description: string;
-  }>({
-    name: "",
-    date: new Date().toISOString().split("T")[0],
-    groupType: EventInputGroupType.Group_A,
-    cpeCredits: "1",
-    description: ""
-  });
+  } | null>(null);
 
-  const createEvent = useCreateEvent({
+  useEffect(() => {
+    if (event && !formData) {
+      setFormData({
+        name: event.name,
+        date: event.date,
+        groupType: event.groupType as EventUpdateGroupType,
+        cpeCredits: String(event.cpeCredits),
+        description: event.description,
+      });
+    }
+  }, [event]);
+
+  const updateEvent = useUpdateEvent({
     mutation: {
-      onSuccess: (data) => {
-        toast({ title: "Event created successfully" });
-        setLocation(`/events/${data.id}`);
+      onSuccess: () => {
+        toast({ title: "Event updated" });
+        queryClient.invalidateQueries({ queryKey: getGetEventQueryKey(eventId) });
+        setLocation(`/events/${eventId}`);
       },
       onError: (err) => {
-        toast({ 
-          title: "Failed to create event", 
+        toast({
+          title: "Failed to update event",
           description: (err.data as { error?: string })?.error || "Check your input and try again.",
-          variant: "destructive" 
+          variant: "destructive",
         });
-      }
-    }
+      },
+    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createEvent.mutate({
+    if (!formData) return;
+    updateEvent.mutate({
+      id: eventId,
       data: {
         name: formData.name,
         date: formData.date,
         groupType: formData.groupType,
         cpeCredits: parseFloat(formData.cpeCredits),
-        description: formData.description
-      }
+        description: formData.description,
+      },
     });
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setDescriptionTouched(true);
-    const val = e.target.value.replace(/[,"']/g, ""); // Strip commas and single/double quotes
+    const val = e.target.value.replace(/[,"']/g, "");
     if (val.length <= 100) {
-      setFormData(prev => ({ ...prev, description: val }));
+      setFormData(prev => prev ? { ...prev, description: val } : prev);
     }
   };
+
+  if (isLoading || !formData) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Create Event</h1>
-        <p className="text-muted-foreground mt-1">Add a new chapter meeting or activity</p>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Edit Event</h1>
+        <p className="text-muted-foreground mt-1">Update the details for this event</p>
       </div>
 
       <Card>
@@ -78,35 +99,24 @@ export default function NewEvent() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="name">Event Name</Label>
-              <Input 
+              <Input
                 id="name"
                 value={formData.name}
-                onChange={e => {
-                  const name = e.target.value;
-                  setFormData(prev => ({
-                    ...prev,
-                    name,
-                    ...(descriptionTouched ? {} : {
-                      description: name.replace(/[,"']/g, "").slice(0, 100)
-                    })
-                  }));
-                }}
+                onChange={e => setFormData(prev => prev ? { ...prev, name: e.target.value } : prev)}
                 placeholder="e.g. Q3 Chapter Meeting"
                 required
-                data-testid="input-event-name"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="date">Event Date</Label>
-                <Input 
+                <Input
                   id="date"
                   type="date"
                   value={formData.date}
-                  onChange={e => setFormData(prev => ({ ...prev, date: e.target.value }))}
+                  onChange={e => setFormData(prev => prev ? { ...prev, date: e.target.value } : prev)}
                   required
-                  data-testid="input-event-date"
                 />
               </div>
 
@@ -119,10 +129,9 @@ export default function NewEvent() {
                   max="40"
                   step="0.25"
                   value={formData.cpeCredits}
-                  onChange={e => setFormData(prev => ({ ...prev, cpeCredits: e.target.value }))}
+                  onChange={e => setFormData(prev => prev ? { ...prev, cpeCredits: e.target.value } : prev)}
                   placeholder="e.g. 1"
                   required
-                  data-testid="input-cpe-credits"
                 />
                 <p className="text-xs text-muted-foreground">.25, .50, .75, or 1 per hour — MAX 40 CPEs</p>
               </div>
@@ -131,30 +140,34 @@ export default function NewEvent() {
             <div className="space-y-2">
               <Label>Group Type</Label>
               <div className="flex gap-4">
-                <label className="flex items-center gap-2 border rounded-md p-4 flex-1 cursor-pointer hover:bg-accent transition-colors data-[selected=true]:border-primary data-[selected=true]:bg-primary/5" data-selected={formData.groupType === EventInputGroupType.Group_A}>
-                  <input 
-                    type="radio" 
-                    name="groupType" 
-                    value={EventInputGroupType.Group_A}
-                    checked={formData.groupType === EventInputGroupType.Group_A}
-                    onChange={() => setFormData(prev => ({ ...prev, groupType: EventInputGroupType.Group_A }))}
+                <label
+                  className="flex items-center gap-2 border rounded-md p-4 flex-1 cursor-pointer hover:bg-accent transition-colors data-[selected=true]:border-primary data-[selected=true]:bg-primary/5"
+                  data-selected={formData.groupType === EventUpdateGroupType.Group_A}
+                >
+                  <input
+                    type="radio"
+                    name="groupType"
+                    value={EventUpdateGroupType.Group_A}
+                    checked={formData.groupType === EventUpdateGroupType.Group_A}
+                    onChange={() => setFormData(prev => prev ? { ...prev, groupType: EventUpdateGroupType.Group_A } : prev)}
                     className="sr-only"
-                    data-testid="radio-group-a"
                   />
                   <div>
                     <div className="font-semibold text-sm">Group A</div>
                     <div className="text-xs text-muted-foreground mt-1">Domain-related activities</div>
                   </div>
                 </label>
-                <label className="flex items-center gap-2 border rounded-md p-4 flex-1 cursor-pointer hover:bg-accent transition-colors data-[selected=true]:border-primary data-[selected=true]:bg-primary/5" data-selected={formData.groupType === EventInputGroupType.Group_B}>
-                  <input 
-                    type="radio" 
-                    name="groupType" 
-                    value={EventInputGroupType.Group_B}
-                    checked={formData.groupType === EventInputGroupType.Group_B}
-                    onChange={() => setFormData(prev => ({ ...prev, groupType: EventInputGroupType.Group_B }))}
+                <label
+                  className="flex items-center gap-2 border rounded-md p-4 flex-1 cursor-pointer hover:bg-accent transition-colors data-[selected=true]:border-primary data-[selected=true]:bg-primary/5"
+                  data-selected={formData.groupType === EventUpdateGroupType.Group_B}
+                >
+                  <input
+                    type="radio"
+                    name="groupType"
+                    value={EventUpdateGroupType.Group_B}
+                    checked={formData.groupType === EventUpdateGroupType.Group_B}
+                    onChange={() => setFormData(prev => prev ? { ...prev, groupType: EventUpdateGroupType.Group_B } : prev)}
                     className="sr-only"
-                    data-testid="radio-group-b"
                   />
                   <div>
                     <div className="font-semibold text-sm">Group B</div>
@@ -167,7 +180,7 @@ export default function NewEvent() {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <Label htmlFor="description">Description</Label>
-                <span className={`text-xs ${formData.description.length === 100 ? 'text-destructive font-medium' : 'text-muted-foreground'}`}>
+                <span className={`text-xs ${formData.description.length === 100 ? "text-destructive font-medium" : "text-muted-foreground"}`}>
                   {formData.description.length}/100
                 </span>
               </div>
@@ -178,7 +191,6 @@ export default function NewEvent() {
                 onChange={handleDescriptionChange}
                 placeholder="e.g. August Chapter Mtg - Cloud Security"
                 required
-                data-testid="input-event-description"
               />
               <p className="text-xs text-muted-foreground">
                 Appears as the Title in each member's ISC2 record. Max 100 characters — commas and quotes are not allowed and will be removed automatically.
@@ -186,12 +198,12 @@ export default function NewEvent() {
             </div>
 
             <div className="pt-4 flex justify-end gap-4">
-              <Button type="button" variant="outline" onClick={() => setLocation('/events')} data-testid="button-cancel-event">
+              <Button type="button" variant="outline" onClick={() => setLocation(`/events/${eventId}`)}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={createEvent.isPending} data-testid="button-save-event">
-                {createEvent.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
-                Create Event
+              <Button type="submit" disabled={updateEvent.isPending}>
+                {updateEvent.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                Save Changes
               </Button>
             </div>
           </form>

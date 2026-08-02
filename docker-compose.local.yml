@@ -1,0 +1,19 @@
+# Local / Docker Desktop override — no public domain or HTTPS required.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
+#
+# Access the app at http://localhost:3000
+# (Caddy is disabled; the app container is exposed directly on port 3000)
+
+services:
+  app:
+    ports:
+      - "3000:3000"
+    environment:
+      # Override the secure-cookie requirement so the app works over plain HTTP
+      NODE_ENV: development
+
+  caddy:
+    profiles:
+      - caddy   # only starts when --profile caddy is passed; disabled by default

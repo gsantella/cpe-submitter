@@ -10,6 +10,7 @@ import Dashboard from '@/pages/dashboard';
 import Members from '@/pages/members';
 import Events from '@/pages/events';
 import NewEvent from '@/pages/event-new';
+import EditEvent from '@/pages/event-edit';
 import EventDetail from '@/pages/event-detail';
 import Chapter from '@/pages/chapter';
 import Login from '@/pages/login';
@@ -46,6 +47,7 @@ function Router() {
         <Route path="/members" component={Members} />
         <Route path="/events" component={Events} />
         <Route path="/events/new" component={NewEvent} />
+        <Route path="/events/:id/edit" component={EditEvent} />
         <Route path="/events/:id" component={EventDetail} />
         <Route path="/chapter" component={Chapter} />
         <Route path="/login"><Redirect to="/" /></Route>

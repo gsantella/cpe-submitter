@@ -124,9 +124,13 @@ router.get("/events/:id/export", async (req, res): Promise<void> => {
     row.commit();
   });
 
-  // Generate safe filename
-  const safeName = event.name.replace(/[^a-zA-Z0-9_\- ]/g, "").trim();
-  const filename = `ISC2_CPE_${safeName}_${event.date}.xlsx`;
+  // Generate safe filename: date-first for chronological sorting, spaces → underscores
+  const safeName =
+    event.name
+      .replace(/[^a-zA-Z0-9_\- ]/g, "")
+      .trim()
+      .replace(/\s+/g, "_") || "Event";
+  const filename = `ISC2_CPE_${event.date}_${safeName}.xlsx`;
 
   res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
   res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);

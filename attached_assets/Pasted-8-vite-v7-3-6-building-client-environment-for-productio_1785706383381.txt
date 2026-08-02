@@ -1,0 +1,79 @@
+8 vite v7.3.6 building client environment for production...
+#26 1.056 ✓ 0 modules transformed.
+#26 1.061 ✗ Build failed in 82ms
+#26 1.061 error during build:
+#26 1.061 [vite:build-html] failed to resolve "extends":"../../tsconfig.base.json" in /workspace/artifacts/cpe-tracker/tsconfig.json
+#26 1.061 file: /workspace/artifacts/cpe-tracker/index.html
+#26 1.061     at resolveExtends (file:///workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:5809:8)
+#26 1.061     at parseExtends (file:///workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:5775:71)
+#26 1.061     at parse$13 (file:///workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:5677:23)
+#26 1.061     at async loadTsconfigJsonForFile (file:///workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6302:37)
+#26 1.061     at async transformWithEsbuild (file:///workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6086:55)
+#26 1.061     at async Object.transform (file:///workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6172:20)
+#26 1.061     at async transform (file:///workspace/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/node-entry.js:21726:16)
+#26 1.061     at async ModuleLoader.addModuleSource (file:///workspace/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/node-entry.js:21946:36)
+#26 1.120 /workspace/artifacts/cpe-tracker:
+#26 1.120  ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @workspace/cpe-tracker@0.0.0 build: `vite build --config vite.config.ts`
+#26 1.120 Exit status 1
+#26 ERROR: process "/bin/sh -c pnpm --filter @workspace/cpe-tracker build" did not complete successfully: exit code: 1
+#27 [api-build 3/3] RUN pnpm --filter @workspace/api-server build
+#27 0.532 
+#27 0.532 > @workspace/api-server@0.0.0 build /workspace/artifacts/api-server
+#27 0.532 > node ./build.mjs
+#27 0.532 
+#27 0.591 ▲ [WARNING] Cannot find base config file "../../tsconfig.base.json" [tsconfig.json]
+#27 0.591 
+#27 0.591     tsconfig.json:2:13:
+#27 0.591       2 │   "extends": "../../tsconfig.base.json",
+#27 0.591         ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+#27 0.591 
+#27 0.625 ▲ [WARNING] Cannot find base config file "../../tsconfig.base.json" [tsconfig.json]
+#27 0.625 
+#27 0.625     ../../lib/db/tsconfig.json:2:13:
+#27 0.625       2 │   "extends": "../../tsconfig.base.json",
+#27 0.625         ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+#27 0.625 
+#27 0.628 ▲ [WARNING] Cannot find base config file "../../tsconfig.base.json" [tsconfig.json]
+#27 0.628 
+#27 0.628     ../../lib/api-zod/tsconfig.json:2:13:
+#27 0.628       2 │   "extends": "../../tsconfig.base.json",
+#27 0.628         ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+#27 0.628 
+#27 1.164 3 warnings
+#27 1.164 
+#27 1.164   dist/index.mjs                       3.9mb ⚠️
+#27 1.164   dist/pino-worker.mjs               153.4kb
+#27 1.164   dist/pino-file.mjs                 142.0kb
+#27 1.164   dist/pino-pretty.mjs               114.4kb
+#27 1.164   dist/thread-stream-worker.mjs        7.3kb
+#27 1.164   dist/index.mjs.map                   7.0mb
+#27 1.164   dist/pino-worker.mjs.map           256.9kb
+#27 1.164   dist/pino-file.mjs.map             229.0kb
+#27 1.164   dist/pino-pretty.mjs.map           203.6kb
+#27 1.164   dist/thread-stream-worker.mjs.map   12.0kb
+#27 1.164 
+#27 1.164 ⚡ Done in 576ms
+#27 CANCELED
+------
+ > [frontend-build 3/3] RUN pnpm --filter @workspace/cpe-tracker build:
+1.061     at parseExtends (file:///workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:5775:71)
+1.061     at parse$13 (file:///workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:5677:23)
+1.061     at async loadTsconfigJsonForFile (file:///workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6302:37)
+1.061     at async transformWithEsbuild (file:///workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6086:55)
+1.061     at async Object.transform (file:///workspace/node_modules/.pnpm/vite@7.3.6_@types+node@25.9.5_jiti@2.7.0_lightningcss@1.32.0_tsx@4.23.1_yaml@2.9.0/node_modules/vite/dist/node/chunks/config.js:6172:20)
+1.061     at async transform (file:///workspace/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/node-entry.js:21726:16)
+1.061     at async ModuleLoader.addModuleSource (file:///workspace/node_modules/.pnpm/rollup@4.62.2/node_modules/rollup/dist/es/shared/node-entry.js:21946:36)
+1.120 /workspace/artifacts/cpe-tracker:
+1.120  ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @workspace/cpe-tracker@0.0.0 build: `vite build --config vite.config.ts`
+1.120 Exit status 1
+------
+Dockerfile:39
+--------------------
+  37 |     ENV BASE_PATH=/
+  38 |     
+  39 | >>> RUN pnpm --filter @workspace/cpe-tracker build
+  40 |     
+  41 |     
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c pnpm --filter @workspace/cpe-tracker build" did not complete successfully: exit code: 1
+Error: buildx failed with: ERROR: failed to build: failed to solve: process "/bin/sh -c pnpm --filter @workspace/cpe-tracker build" did not complete successfully: exit code: 1

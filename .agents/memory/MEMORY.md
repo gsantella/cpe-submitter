@@ -1,0 +1,1 @@
+- [Docker pnpm version pinning](docker-pnpm-version.md) — pin pnpm to v10 in Dockerfile; corepack latest pulls v11 which breaks --frozen-lockfile (lockfileVersion mismatch).

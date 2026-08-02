@@ -62,7 +62,8 @@ if (process.env.NODE_ENV === "production") {
   const publicDir = path.join(process.cwd(), "public");
   app.use(express.static(publicDir));
   // Catch-all: return index.html for any non-API route so React Router works
-  app.get("*", (_req, res) => {
+  // Express 5 requires explicit wildcard syntax — "*" is rejected by path-to-regexp v8
+  app.get("/{*splat}", (_req, res) => {
     res.sendFile(path.join(publicDir, "index.html"));
   });
 }

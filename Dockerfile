@@ -74,6 +74,9 @@ ENV MIGRATIONS_FOLDER=/app/migrations
 # API server bundle + pino worker files
 COPY --from=api-build /workspace/artifacts/api-server/dist/ ./dist/
 
+# Static assets referenced at runtime (e.g. isc2-template.xlsx for export)
+COPY --from=api-build /workspace/artifacts/api-server/src/assets/ ./src/assets/
+
 # Drizzle migrations — applied automatically on startup by lib/db/src/index.ts
 # Resolves to /app/migrations/ which is ../migrations relative to dist/index.mjs
 COPY --from=api-build /workspace/lib/db/migrations/ ./migrations/

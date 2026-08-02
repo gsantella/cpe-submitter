@@ -178,7 +178,7 @@ export default function Members() {
           </div>
         ) : !members || members.length === 0 ? (
           <div className="p-12 text-center text-muted-foreground">
-            No members found matching your search.
+            No members found matching your search
           </div>
         ) : (
           <>
@@ -257,8 +257,8 @@ export default function Members() {
           <AlertDialogHeader>
             <AlertDialogTitle>Remove member?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently remove <strong>{deleteTarget?.name}</strong> from the directory.
-              Their attendance records will also be removed. This cannot be undone.
+              This will permanently remove <strong>{deleteTarget?.name}</strong> from the directory
+              Their attendance records will also be removed. This cannot be undone
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -59,7 +59,7 @@ export default function Login() {
               Chapter Sign In
             </CardTitle>
             <CardDescription>
-              Enter the credentials configured for your chapter.
+              Enter the credentials configured for your chapter
             </CardDescription>
           </CardHeader>
           <CardContent>

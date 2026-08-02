@@ -258,7 +258,7 @@ export default function Chapter() {
                   required
                   disabled={credsSaving}
                 />
-                <p className="text-xs text-muted-foreground">Minimum 8 characters.</p>
+                <p className="text-xs text-muted-foreground">Minimum 8 characters</p>
               </div>
 
               <div className="space-y-2">
@@ -303,7 +303,7 @@ export default function Chapter() {
           <AlertDialogHeader>
             <AlertDialogTitle>Disable sign-in?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will remove the username and password and allow anyone with access to this URL to use the app. You will be signed out immediately.
+              This will remove the username and password and allow anyone with access to this URL to use the app. You will be signed out immediately
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

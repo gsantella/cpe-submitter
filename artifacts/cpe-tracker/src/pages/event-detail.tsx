@@ -377,7 +377,7 @@ export default function EventDetail() {
           <AlertDialogHeader>
             <AlertDialogTitle>Remove attendee?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will remove the check-in for this attendee. You can check them in again if needed.
+              This will remove the check-in for this attendee. You can check them in again if needed
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

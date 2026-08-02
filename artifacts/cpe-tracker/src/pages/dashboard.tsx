@@ -86,7 +86,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {stats.recentEvents.length === 0 ? (
             <div className="col-span-full py-12 text-center border rounded-lg bg-card text-muted-foreground">
-              No recent events found.
+              No recent events found
             </div>
           ) : (
             stats.recentEvents.map((event) => (

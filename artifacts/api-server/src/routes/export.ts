@@ -130,7 +130,8 @@ router.get("/events/:id/export", async (req, res): Promise<void> => {
       .replace(/[^a-zA-Z0-9_\- ]/g, "")
       .trim()
       .replace(/\s+/g, "_") || "Event";
-  const filename = `ISC2_CPE_${event.date}_${safeName}.xlsx`;
+  const safeDate = event.date.replace(/-/g, "_");
+  const filename = `ISC2_CPE_${safeDate}_${safeName}.xlsx`;
 
   res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
   res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);

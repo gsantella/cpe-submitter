@@ -7,7 +7,10 @@ RUN apt-get update && \
     apt-get install -y python3 make g++ && \
     rm -rf /var/lib/apt/lists/*
 
-RUN corepack enable pnpm
+# Pin pnpm to the same major version used to generate the lockfile (v10).
+# Using a different major (e.g. v11 from corepack latest) changes the
+# lockfile format and causes --frozen-lockfile to fail.
+RUN npm install -g pnpm@10
 WORKDIR /workspace
 
 # Copy workspace manifests first for layer caching

@@ -1,7 +1,7 @@
 # ── Stage 1: Install all workspace dependencies ────────────────────────────
-# node:22-slim (Debian/glibc) is required — pnpm 11 needs Node 22+, and the
+# node:24-slim (Debian/glibc) is required — pnpm 11 needs Node 22+, and the
 # pnpm workspace excludes musl platform variants so Alpine cannot be used.
-FROM node:22-slim AS deps
+FROM node:24-slim AS deps
 
 RUN apt-get update && \
     apt-get install -y python3 make g++ && \
@@ -47,7 +47,7 @@ RUN pnpm --filter @workspace/api-server build
 
 # ── Stage 4: Compile better-sqlite3 for production ────────────────────────
 # Compiled separately so the production image needs no build tools.
-FROM node:22-slim AS sqlite-build
+FROM node:24-slim AS sqlite-build
 
 RUN apt-get update && \
     apt-get install -y python3 make g++ && \
@@ -58,7 +58,7 @@ RUN npm install better-sqlite3@11
 
 
 # ── Stage 5: Production image ──────────────────────────────────────────────
-FROM node:22-slim AS production
+FROM node:24-slim AS production
 WORKDIR /app
 
 ENV NODE_ENV=production

@@ -50,15 +50,16 @@ router.post("/auth/login", async (req, res): Promise<void> => {
     return;
   }
 
-  const { username, password } = req.body as { username?: string; password?: string };
-  if (typeof username !== "string" || typeof password !== "string") {
+  const { username: rawUsername, password } = req.body as { username?: string; password?: string };
+  if (typeof rawUsername !== "string" || typeof password !== "string") {
     res.status(400).json({ error: "username and password are required" });
     return;
   }
+  const username = rawUsername.toLowerCase().trim();
 
   // Env-var override takes precedence (recovery / initial setup)
   if (process.env.AUTH_USERNAME && process.env.AUTH_PASSWORD) {
-    if (safeCompare(username, process.env.AUTH_USERNAME) && safeCompare(password, process.env.AUTH_PASSWORD)) {
+    if (safeCompare(username, process.env.AUTH_USERNAME.toLowerCase().trim()) && safeCompare(password, process.env.AUTH_PASSWORD)) {
       (req.session as any).authenticated = true;
       (req.session as any).username = username;
       res.json({ username });
@@ -68,7 +69,7 @@ router.post("/auth/login", async (req, res): Promise<void> => {
     const row = await getSettings();
     if (row?.authUsername && row?.authPasswordHash) {
       if (
-        safeCompare(username, row.authUsername) &&
+        safeCompare(username, row.authUsername.toLowerCase().trim()) &&
         (await bcrypt.compare(password, row.authPasswordHash))
       ) {
         (req.session as any).authenticated = true;
@@ -157,12 +158,13 @@ router.post("/auth/credentials", async (req, res): Promise<void> => {
 
   const hash = await bcrypt.hash(newPassword, SALT_ROUNDS);
 
+  const normalizedUsername = username.toLowerCase().trim();
   await db
     .insert(settingsTable)
-    .values({ id: 1, chapterName: "", authUsername: username.trim(), authPasswordHash: hash })
+    .values({ id: 1, chapterName: "", authUsername: normalizedUsername, authPasswordHash: hash })
     .onConflictDoUpdate({
       target: settingsTable.id,
-      set: { authUsername: username.trim(), authPasswordHash: hash },
+      set: { authUsername: normalizedUsername, authPasswordHash: hash },
     });
 
   res.json({ ok: true });

@@ -14,7 +14,7 @@ RUN npm install -g pnpm@10
 WORKDIR /workspace
 
 # Copy workspace manifests first for layer caching
-COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml tsconfig.base.json ./
 COPY lib/api-client-react/package.json lib/api-client-react/
 COPY lib/api-spec/package.json           lib/api-spec/
 COPY lib/api-zod/package.json            lib/api-zod/

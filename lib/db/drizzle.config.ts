@@ -9,6 +9,7 @@ const dbPath = path.join(dataDir, "cpe-tracker.db");
 
 export default defineConfig({
   schema: path.join(__dirname, "./src/schema/index.ts"),
+  out: path.join(__dirname, "./migrations"),
   dialect: "sqlite",
   dbCredentials: {
     url: dbPath,

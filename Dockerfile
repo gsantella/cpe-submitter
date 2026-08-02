@@ -68,9 +68,15 @@ ENV NODE_ENV=production
 ENV PORT=3000
 # Override with DATABASE_PATH=/data/cpe-tracker.db (set in docker-compose.yml)
 ENV DATABASE_PATH=/data/cpe-tracker.db
+# Drizzle migrations folder — matches where migrations/ is copied below
+ENV MIGRATIONS_FOLDER=/app/migrations
 
 # API server bundle + pino worker files
 COPY --from=api-build /workspace/artifacts/api-server/dist/ ./dist/
+
+# Drizzle migrations — applied automatically on startup by lib/db/src/index.ts
+# Resolves to /app/migrations/ which is ../migrations relative to dist/index.mjs
+COPY --from=api-build /workspace/lib/db/migrations/ ./migrations/
 
 # Native SQLite module (compiled on same OS/arch as this image)
 COPY --from=sqlite-build /sqlite/node_modules/ ./node_modules/

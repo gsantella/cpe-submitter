@@ -70,7 +70,7 @@ export default function NewEvent() {
     <div className="max-w-2xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Create Event</h1>
-        <p className="text-muted-foreground mt-1">Add a new chapter meeting or activity.</p>
+        <p className="text-muted-foreground mt-1">Add a new chapter meeting or activity</p>
       </div>
 
       <Card>

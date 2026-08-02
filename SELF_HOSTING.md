@@ -2,6 +2,13 @@
 
 Run your own instance of the ISC2 CPE Tracker on any server with Docker installed. Caddy handles HTTPS automatically — no certificate management required.
 
+> **Pre-built image available.**  
+> A ready-to-run Docker image is published to GitHub Container Registry on every release:
+> ```
+> ghcr.io/gsantella/cpe-submitter:latest
+> ```
+> No Git, Node, pnpm, or build toolchain required — just Docker.
+
 ## Prerequisites
 
 - A server with Docker and Docker Compose installed ([docs.docker.com](https://docs.docker.com/get-docker/))
@@ -10,24 +17,28 @@ Run your own instance of the ISC2 CPE Tracker on any server with Docker installe
 
 ## Setup (4 steps)
 
-### 1. Clone the repository
+### 1. Download the two config files
+
+You do not need to clone the full repository. Download only the two files Docker Compose needs:
 
 ```bash
-git clone https://github.com/gsantella/cpe-submitter.git
-cd cpe-submitter
+curl -O https://raw.githubusercontent.com/gsantella/cpe-submitter/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/gsantella/cpe-submitter/main/Caddyfile
 ```
 
 ### 2. Create your `.env` file
 
-```bash
-cp .env.example .env
-```
-
-Open `.env` and fill in the two required values:
+Create a `.env` file in the same directory with these two required values:
 
 ```env
 DOMAIN=cpe.yourchapter.org          # your real domain
 SESSION_SECRET=<output of: openssl rand -hex 32>
+```
+
+Generate a secure `SESSION_SECRET` with:
+
+```bash
+openssl rand -hex 32
 ```
 
 ### 3. Point your DNS
@@ -39,6 +50,8 @@ Add an **A record** for your domain pointing to your server's public IP address.
 ```bash
 docker compose up -d
 ```
+
+Docker will pull the pre-built image from GHCR automatically — no build step needed.
 
 That's it. Visit `https://your-domain.com` — you'll land on the app over HTTPS.
 
@@ -64,13 +77,24 @@ docker run --rm \
 
 ## Updating
 
+Pull the latest pre-built image and restart:
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+The database volume is untouched during updates.
+
+### Developers building from source
+
+If you are running a local build (with `build: .` in docker-compose.yml instead of `image:`):
+
 ```bash
 git pull
 docker compose build
 docker compose up -d
 ```
-
-The database volume is untouched during updates.
 
 ---
 

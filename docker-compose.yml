@@ -1,6 +1,11 @@
 services:
   app:
-    build: .
+    # Self-hosters: pull the pre-built image from GitHub Container Registry
+    # (no Git, Node, or pnpm required on the host)
+    image: ghcr.io/gsantella/cpe-submitter:latest
+    # Developers: comment out the `image:` line above and uncomment `build: .`
+    # to build locally from source.
+    # build: .
     restart: unless-stopped
     environment:
       NODE_ENV: production

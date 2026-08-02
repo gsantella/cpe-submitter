@@ -6,6 +6,33 @@ Built for the Penn Highlands Chapter.
 
 ---
 
+## Self-hosting
+
+The easiest way to run your own instance is with Docker — no Node.js, pnpm, or build toolchain required.
+
+```bash
+# Download the two config files
+curl -O https://raw.githubusercontent.com/gsantella/cpe-submitter/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/gsantella/cpe-submitter/main/Caddyfile
+
+# Create your .env (fill in DOMAIN and SESSION_SECRET)
+curl -O https://raw.githubusercontent.com/gsantella/cpe-submitter/main/.env.example
+cp .env.example .env
+
+# Start
+docker compose up -d
+```
+
+A pre-built image is published automatically to GitHub Container Registry on every push to `main`:
+
+```
+ghcr.io/gsantella/cpe-submitter:latest
+```
+
+**→ See [SELF_HOSTING.md](SELF_HOSTING.md) for full instructions**, including the local/Docker Desktop setup (no public domain required).
+
+---
+
 ## Features
 
 - **Member directory** — add, search, and remove chapter members
@@ -15,32 +42,32 @@ Built for the Penn Highlands Chapter.
 
 ---
 
-## Prerequisites
+## Local development
+
+### Prerequisites
 
 | Requirement | Version | Notes |
 |---|---|---|
-| Node.js | 18 or later | [nodejs.org](https://nodejs.org) |
-| pnpm | 9 or later | `npm install -g pnpm` |
+| Node.js | 22 or later | [nodejs.org](https://nodejs.org) |
+| pnpm | 10 | `npm install -g pnpm@10` |
 | C++ build tools | — | Required by `better-sqlite3` (see below) |
 
-### C++ build tools (for `better-sqlite3`)
+#### C++ build tools (for `better-sqlite3`)
 
-`better-sqlite3` compiles a native SQLite binding from C++ during `pnpm install`.
+`better-sqlite3` compiles a native SQLite binding during `pnpm install`.
 
-- **macOS** — install Xcode Command Line Tools: `xcode-select --install`
-- **Linux** — install `build-essential` and `python3`: `sudo apt install build-essential python3`
-- **Windows** — run `npm install -g windows-build-tools` in an admin PowerShell, or install Visual Studio Build Tools manually
+- **macOS** — `xcode-select --install`
+- **Linux** — `sudo apt install build-essential python3`
+- **Windows** — install Visual Studio Build Tools or run `npm install -g windows-build-tools` in an admin PowerShell
 
----
-
-## Getting started
+### Getting started
 
 ```bash
 # 1. Clone the repo
 git clone https://github.com/gsantella/cpe-submitter.git
 cd cpe-submitter
 
-# 2. Install dependencies (this compiles better-sqlite3 — takes ~1–2 min on first run)
+# 2. Install dependencies (compiles better-sqlite3 — takes ~1–2 min on first run)
 pnpm install
 
 # 3. Create the SQLite database and apply the schema
@@ -52,11 +79,7 @@ pnpm dev
 
 The app will be available at **http://localhost:5173**.
 
----
-
-## Running services individually
-
-Open two terminals:
+### Running services individually
 
 ```bash
 # Terminal 1 — API server (http://localhost:3001)
@@ -70,13 +93,13 @@ pnpm --filter @workspace/cpe-tracker run dev
 
 ## Environment variables
 
-Copy `.env.example` to `.env` and adjust if needed. Defaults work out of the box for local development.
-
 | Variable | Default | Description |
 |---|---|---|
 | `PORT` | `3001` | Port the API server listens on |
 | `API_URL` | `http://localhost:3001` | API server URL (used by the Vite dev proxy) |
 | `BASE_PATH` | `/` | Frontend base path (set automatically on Replit) |
+| `DATABASE_PATH` | `data/cpe-tracker.db` | Path to the SQLite database file |
+| `SESSION_SECRET` | *(dev only)* | Required in production — sign session cookies |
 
 ---
 
@@ -91,8 +114,12 @@ Copy `.env.example` to `.env` and adjust if needed. Defaults work out of the box
 │   ├── api-spec/          OpenAPI spec + Orval codegen config
 │   ├── api-client-react/  Generated React Query hooks
 │   └── api-zod/           Generated Zod validators
-└── data/
-    └── cpe-tracker.db     SQLite database (auto-created on first run)
+├── data/
+│   └── cpe-tracker.db     SQLite database (auto-created on first run)
+├── Dockerfile             Multi-stage Docker build
+├── docker-compose.yml     Production stack (app + Caddy HTTPS)
+├── docker-compose.local.yml  Local/Docker Desktop override (no domain needed)
+└── SELF_HOSTING.md        Full self-hosting guide
 ```
 
 ---
@@ -101,7 +128,7 @@ Copy `.env.example` to `.env` and adjust if needed. Defaults work out of the box
 
 The SQLite database is created automatically at `data/cpe-tracker.db` on first run. No database server required.
 
-To reset the database: delete `data/cpe-tracker.db` and run `pnpm --filter @workspace/db run push` again.
+To reset: delete `data/cpe-tracker.db` and run `pnpm --filter @workspace/db run push` again.
 
 ---
 
